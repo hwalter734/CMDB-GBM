@@ -1,0 +1,12 @@
+---
+- name: Delete environment
+  hosts: localhost
+  tasks:
+    - name: Removing main resource group
+      azure_rm_resourcegroup:
+        name: "{{ item }}"
+        state: absent
+        force_delete_nonempty: yes
+      with_items:
+        - "{{ resource_group }}"
+        - "{{ network_group }}"
