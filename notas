@@ -1,2 +1,0 @@
-  - name: Refresh inventory to ensure new instances exist in inventory
-    meta: refresh_inventory
