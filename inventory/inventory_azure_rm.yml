@@ -1,0 +1,16 @@
+---
+plugin: azure_rm
+include_vm_resource_groups:
+  - maingroup
+  - networkgroup
+auth_source: auto
+conditional_groups:
+  rhel_hosts: "'RHEL' in image.offer"
+  mainserver: "'UbuntuServer' in image.offer"
+  windowsserver: "'WindowsServer' in image.offer"
+  newciscohost: "'cisco-csr-1000v' in image.offer"
+  windows_servers: "'WindowsServer' in image.offer"
+  linux_servers: "'UbuntuServer' in image.offer or 'RHEL' in image.offer"
+  cisco_group: "'cisco-csr-1000v' in image.offer"
+  normal_servers: "'UbuntuServer' in image.offer or 'RHEL' in image.offer or 'WindowsServer' in image.offer"
+...

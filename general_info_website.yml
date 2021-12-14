@@ -1,0 +1,59 @@
+---
+- name: Gather Windows servers devices facts
+  hosts: windows_servers
+  tasks:
+    - name: Getting disks info of windows servers
+      win_disk_facts:
+
+    - name: Output first disk size
+      set_fact:
+        totaldiskspace: "{{ ansible_facts.disks[0].size // 1073741824 }}"
+
+    - name: execute powershell
+      win_command: powershell.exe "Get-PSDrive C | Select-Object Free | ConvertTo-Json"
+      register: getpsdrive
+
+    - name: Register freediskspace as a fact
+      set_fact:
+        freediskspace: "{{ (getpsdrive.stdout | from_json).Free // 1073741824 }}"
+      when: "'windows_servers' is in groups"
+
+- name: Gather linux servers devices facts
+  hosts: linux_servers
+  tasks:
+    - name: Setting up custom devices facts
+      set_fact:
+        my_devs: "{{ ansible_devices.keys() | reject('match', '^loop(.*)$') | list }}"
+
+    - name: Formatting device facts
+      set_fact:
+        user_devs: "{{ user_devs|default([]) + [ansible_mounts|selectattr('device', 'match', my_regex) | list | json_query(my_query)] | first }}"
+      loop: "{{ my_devs }}"
+      vars:
+        my_regex: '^(.*){{ item }}(.*)$'
+        my_query: '[].[device, size_total, size_available]'
+
+- name: Gather normal hosts facts
+  hosts: normal_hosts
+  tasks:
+    - name: Creating normal_hosts_template.j2
+      template:
+        src: hosts_template.j2
+        dest: /var/lib/awx/projects/gbm_cmdb/html/data/hosts_data.json
+        force: yes
+      delegate_to: localhost
+      become: yes
+      become_user: root
+
+- name: Gather network devices facts
+  hosts: routers
+  connection: network_cli
+  tasks:
+    - name: Creating network_devices_data.json
+      template:
+        src: routers_template_csv.j2
+        dest: /var/lib/awx/projects/gbm_cmdb/html/data/network_devices_data.json
+        force: yes
+      delegate_to: localhost
+      become: yes
+      become_user: root
