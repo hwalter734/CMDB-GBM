@@ -89,7 +89,7 @@
     - name: Creating normal_hosts_template.j2
       template:
         src: hosts_template.j2
-        dest: /var/lib/awx/projects/CMDB-Complete/html/data/hosts_data.json
+        dest: html/data/hosts_data.json
         force: yes
       delegate_to: localhost
       become: yes
@@ -102,7 +102,7 @@
     - name: Creating network_devices_data.json
       template:
         src: routers_template_csv.j2
-        dest: /var/lib/awx/projects/CMDB-Complete/html/data/network_devices_data.json
+        dest: html/data/network_devices_data.json
         force: yes
       delegate_to: localhost
       become: yes
