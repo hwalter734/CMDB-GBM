@@ -92,9 +92,6 @@
         dest: html/data/hosts_data.json
         force: yes
       delegate_to: localhost
-      become: yes
-      become_user: root
-      become_password: "{{ root_password }}"
 
 - name: Gather network devices facts
   hosts: routers
@@ -106,9 +103,6 @@
         dest: html/data/network_devices_data.json
         force: yes
       delegate_to: localhost
-      become: yes
-      become_user: root
-      become_password: "{{ root_password }}"
 
 - name: Importing setup_website.yml
   import_playbook: setup_website.yml
