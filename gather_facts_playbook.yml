@@ -45,11 +45,11 @@
       delegate_to: localhost
 
 - name: Gather normal hosts facts
-  hosts: normal_hosts
+  hosts: normal_servers
   tasks:
     - name: Creating hosts_template_csv.j2
       template:
-        src: normal_hosts_template_csv.j2
+        src: normal_servers_template_csv.j2
         dest: normal_facts_gathered.csv
         force: yes
       delegate_to: localhost
@@ -84,9 +84,9 @@
         target: /var/lib/mysql/insert_data_facts.sql
 
 - name: Gather normal hosts facts
-  hosts: normal_hosts
+  hosts: normal_servers
   tasks:
-    - name: Creating normal_hosts_template.j2
+    - name: Creating normal_servers_template.j2
       template:
         src: hosts_template.j2
         dest: html/data/hosts_data.json
