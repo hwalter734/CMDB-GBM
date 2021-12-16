@@ -47,9 +47,9 @@
 - name: Gather normal hosts facts
   hosts: normal_servers
   tasks:
-    - name: Creating hosts_template_csv.j2
+    - name: Creating normal_facts_gathered.csv
       template:
-        src: normal_servers_template_csv.j2
+        src: normal_hosts_template_csv.j2
         dest: normal_facts_gathered.csv
         force: yes
       delegate_to: localhost
@@ -88,7 +88,7 @@
   tasks:
     - name: Creating normal_servers_template.j2
       template:
-        src: normal_hosts_template_csv.j2
+        src: normal_hosts_template_json.j2
         dest: html/data/hosts_data.json
         force: yes
       delegate_to: localhost
@@ -99,7 +99,7 @@
   tasks:
     - name: Creating network_devices_data.json
       template:
-        src: routers_template_csv.j2
+        src: routers_template_json.j2
         dest: html/data/network_devices_data.json
         force: yes
       delegate_to: localhost
