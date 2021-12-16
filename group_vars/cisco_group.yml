@@ -1,3 +1,2 @@
 ---
 ansible_network_os: ios
-ansible_python_interpreter: /usr/bin/python3
