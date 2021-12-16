@@ -27,7 +27,6 @@
             msg: One or more of the provided ip is not valid, please enter a valid ip
           when: ip_var_subnet_1 == false or ip_var_subnet_2 == false or ip_var_subnet_3 == false
 
-
     - name: Creating ingress TCP rules for all servers
       azure_rm_securitygroup:
         name: "{{ sg_name }}"
@@ -45,6 +44,27 @@
             access: Allow
             direction: Inbound
             priority: 1001
+        state: present
+
+    - name: Creating ingress TCP rules for main server...
+      azure_rm_securitygroup:
+        name: "{{ main_sg_name }}"
+        resource_group: "{{ resource_group }}"
+        rules:
+          - name: AllowSsh
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1001
+            direction: Inbound
+          - name: AllowHttp&https
+            protocol: Tcp
+            destination_port_range:
+              - 80
+              - 443
+            access: Allow
+            priority: 1002
+            direction: Inbound
         state: present
 
     - name: Creating the virtual network...
@@ -75,7 +95,7 @@
         resource_group: "{{ resource_group }}"
         address_prefix_cidr: "{{ ubuntu_instance_addr }}"
         virtual_network: "{{ vn_name }}"
-        security_group: "{{ sg_name }}"
+        security_group: "{{ main_sg_name }}"
 
     - name: Creating a public ip for RHEL instance
       azure_rm_publicipaddress:
@@ -120,7 +140,7 @@
         virtual_network: "{{ vn_name }}"
         subnet: "{{ ubuntu_subnet_name }}"
         public_ip_name: "{{ ubuntu_instance_name }}"
-        security_group: "{{ sg_name }}"
+        security_group: "{{ main_sg_name }}"
 
     - name: Creating RHEL instance
       azure_rm_virtualmachine:

@@ -3,7 +3,7 @@
 {% for host in groups['normal_servers'] %}
     {
         "Hostname": "{{ hostvars[host]['ansible_hostname'] | default('', true) }}",
-        "Main_Group": "{{ hostvars[host]['group_names'] | reject('match','^normal_servers$') | list | join('\n') | default('', true) }}",
+        "Main_Group": "{{ hostvars[host]['group_names'] | reject('match','^normal_servers$') | list | join(' ') | default('', true) }}",
         "Groups": "{{ hostvars[host]['ansible_hostname'] | default('', true) }}",
         "FQDN": "{{ hostvars[host]['ansible_fqdn'] | default('', true) }}",
         "All_IPV4_Addresses": "{{ hostvars[host]['ansible_all_ipv4_addresses'] | default('', true) }}",
@@ -44,9 +44,9 @@
         "SELinux": "{{ hostvars[host]['ansible_selinux'] | default('', true) }}",
         "PackageManager": "{{ hostvars[host]['ansible_pkg_mgr'] | default('', true) }}",
 {% if loop.index == loop.length %}
-    {% if ansible_local is defined %}
+    {% if custom_facts is defined %}
         "Domain": "{{ hostvars[host]['ansible_domain'] }}",
-        {% for item in ansible_local.values() %}
+        {% for item in custom_facts.values() %}
             {% if loop.index == loop.length %}
 "{{ item['name'] }}": "{{ item['value'] }}" }
             {% else %}
@@ -58,9 +58,9 @@
 }
     {% endif %}
 {% else %}
-    {% if ansible_local is defined %}
+    {% if custom_facts is defined %}
         "Domain": "{{ hostvars[host]['ansible_domain'] }}",
-        {% for item in ansible_local.values() %}
+        {% for item in custom_facts.values() %}
             {% if loop.index == loop.length %}
 "{{ item['name'] }}": "{{ item['value'] }}" },
             {% else %}
@@ -111,9 +111,9 @@
         { "data": "UserSpaceArchitecture", "name": "UserSpaceArchitecture" },
         { "data": "SELinux", "name": "SELinux" },
         { "data": "PackageManager", "name": "PackageManager" },
-{% if ansible_local is defined %}
+{% if custom_facts is defined %}
         { "data": "Domain", "name": "Domain" },
-{% for item in ansible_local.values() %}
+{% for item in custom_facts.values() %}
 {% if loop.index == loop.length %}
         { "data": "{{ item['name'] }}", "name": "{{ item['name'] }}" }
 {% else %}
