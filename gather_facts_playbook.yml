@@ -88,7 +88,7 @@
   tasks:
     - name: Creating normal_servers_template.j2
       template:
-        src: hosts_template.j2
+        src: normal_hosts_template_csv.j2
         dest: html/data/hosts_data.json
         force: yes
       delegate_to: localhost
