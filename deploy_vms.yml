@@ -141,6 +141,10 @@
         subnet: "{{ ubuntu_subnet_name }}"
         public_ip_name: "{{ ubuntu_instance_name }}"
         security_group: "{{ main_sg_name }}"
+        open_ports:
+          - 22
+          - 80
+          - 443
 
     - name: Creating RHEL instance
       azure_rm_virtualmachine:
