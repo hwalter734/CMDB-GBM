@@ -23,6 +23,11 @@
     name: python3-mysqldb
     state: latest
 
+- name: Make sure setup tools is installed
+  pip:
+    name: setuptools
+    state: present
+
 - name: Make sure pymysql is present
   pip:
     name: pymysql
