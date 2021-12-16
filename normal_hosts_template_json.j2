@@ -1,9 +1,9 @@
 {
         "data" : [
-{% for host in groups['normal_hosts'] %}
+{% for host in groups['normal_servers'] %}
     {
         "Hostname": "{{ hostvars[host]['ansible_hostname'] | default('', true) }}",
-        "Main_Group": "{{ hostvars[host]['group_names'] | reject('match','^normal_hosts$') | list | join('\n') | default('', true) }}",
+        "Main_Group": "{{ hostvars[host]['group_names'] | reject('match','^normal_servers$') | list | join('\n') | default('', true) }}",
         "Groups": "{{ hostvars[host]['ansible_hostname'] | default('', true) }}",
         "FQDN": "{{ hostvars[host]['ansible_fqdn'] | default('', true) }}",
         "All_IPV4_Addresses": "{{ hostvars[host]['ansible_all_ipv4_addresses'] | default('', true) }}",
