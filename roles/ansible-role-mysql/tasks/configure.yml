@@ -5,6 +5,11 @@
   changed_when: false
   check_mode: false
 
+- name: Make sure pymysql is present
+  pip:
+    name: pymysql
+    state: present
+
 - name: Copy my.cnf global MySQL configuration.
   template:
     src: my.cnf.j2
