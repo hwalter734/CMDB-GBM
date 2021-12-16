@@ -201,6 +201,10 @@
         vm_size: Standard_DS1_v2
         subnet_name: "{{ ubuntu_subnet_name }}"
         os_type: Linux
+        open_ports:
+          - 22
+          - 80
+          - 443
         image:
           publisher: Canonical
           offer: UbuntuServer
